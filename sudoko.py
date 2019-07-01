@@ -12,6 +12,27 @@ def print_board(board):
             print('\n', end =' ')
         print('\n')
 
+
+
+def print_board_ext(board):
+
+    print('_' * 24)
+    for i in range(1,10):
+        print ('|', end = '')
+        for j in range(1,10):
+            if board[i,j] == 0:
+                pstr = '  '
+            else:
+                pstr = ' ' + str(board[i,j])
+            print(pstr, end = '')
+            if j in (3, 6, 9 ):
+                print(' ', end = '|')
+
+        if i in (3, 6, 9):
+            print('')
+            print('_' * 24, end = ' ')
+        print('\n')
+
 def print_analysis_board(analysis_board):
 
     for i in range(1,10):
@@ -27,6 +48,28 @@ def print_analysis_board(analysis_board):
                 print(' ', end = ' ')
         if i in (3, 6):
             print('\n', end =' ')
+        print('\n')
+
+def print_analysis_board_ext(analysis_board):
+
+    print('_' * 106)
+    for i in range(1,10):
+        print('| ', end = '')
+        for j in range(1,10):
+
+            aset = analysis_board[i,j]
+            str = ""
+            for a in aset:
+                str = str + '%s' % a
+            str1 = '%-10s' % str
+            print(str1, end = ' ')
+            if j in (3, 6, 9 ):
+                print(' ', end = '|')
+
+
+        if i in (3, 6, 9):
+            print('\n')
+            print('_' * 106)
         print('\n')
 
 def initialise_board(board, analysis_board):
@@ -115,6 +158,39 @@ def analyse_board(board, analysis_board):
 
     return found
 
+def print_board_core(analysis_board, board):
+    pass
+
+def print_number_board(number, analysis_board, board):
+
+    number_board = {}
+
+    for i in range(1,10):
+        for j in range(1,10):
+            number_board[i,j] = ' '
+
+    for i in range(1,10):
+        for j in range(1,10):
+            if board[i, j] == number:
+                number_board[i, j] = '*'
+            if number in analysis_board[i, j]:
+                number_board[i, j] = number
+
+
+    print('_' * 24)
+    for i in range(1, 10):
+        print('| ',end='')
+        for j in range(1, 10):
+            print(f'{number_board[i, j]}', end =' ')
+            if j in (3, 6, 9):
+                print('| ', end='')
+        if i in (3, 6, 9):
+            print('\n', end='')
+            print('_' * 24, end='')
+
+        print('\n')
+    print('\n')
+
 
 def sudoko_game():
 
@@ -122,30 +198,50 @@ def sudoko_game():
     analysis_board = {}
 
     initialise_board(board, analysis_board)
-    print_board(board)
-    print_analysis_board(analysis_board)
+    print_board_ext(board)
+    analyse_board(board, analysis_board)
+    print_board_ext(board)
 
     while True:
-        analyse_board(board, analysis_board)
-        print_board(board)
-        print('\n')
-        print_analysis_board(analysis_board)
-        print('\n')
+        cmd = input('Command? ')
 
-        if input('Suggestion?') == 'y':
-            x = int(input ('Row: '))
-            y = int(input ('Col: '))
-            v = int(input ('Val: '))
-            analysis_board[x,y]=set()
-            board[x,y] = v
+        if cmd == '':
+            pass
+        elif cmd == 'pb':
             print('\n')
-            print_board(board)
+            print_board_ext(board)
+        elif cmd == 'pa':
+            print_analysis_board_ext(analysis_board)
+            print('\n')
+        elif cmd[0] == 'n':
+            try:
+                i = int(cmd[1])
+                if i in range (1,10):
+                    print_number_board(i, analysis_board, board)
+                else:
+                    continue
+            except:
+                continue
+        elif cmd[0] == 'c':
+            print_core_board(analysis_board, board)
+        elif cmd[0] == 's':
+            x = cmd.split(' ')
+            try:
+                i = int(x[1])
+                j = int(x[2])
+            except:
+                continue
+            analysis_board[i,j] = set()
+            board[i,j] = int(x[3])
+            analyse_board(board, analysis_board)
+        elif cmd[0] == 'r]':
+            initialise_board(board, analysis_board)
+        elif cmd[0] == 'q':
+            exit()
             print('\n')
         else:
-            break
+            pass
 
-    print('\n\n')
-    print_board(board)
 
 if __name__ == "__main__":
     sudoko_game()
