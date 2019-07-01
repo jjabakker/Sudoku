@@ -35,31 +35,23 @@ def initialise_board(board, analysis_board):
         for j in range(1,10):
             board[i,j] = 0
 
-    for i in range(1,10):
-        for j in range(1,10):
-            analysis_board[i,j] = set([1,2,3,4,5,6,7,8,9])
 
-    board[1,8] = 2
-    board[1,9] = 5
-    board[2,2] = 6
-    board[2,4] = 3
-    board[2,6] = 4
-    board[3,8] = 6
-    board[3,9] = 1
-    board[4,2] = 5
-    board[4,8] = 8
-    board[5,5] = 7
-    board[6,1] = 7
-    board[6,3] = 3
-    board[6,4] = 9
-    board[6,5] = 5
-    board[6,9] = 2
-    board[7,1] = 3
-    board[7,3] = 7
-    board[7,4] = 5
-    board[7,5] = 6
-    board[8,6] = 7
-    board[9,8] = 7
+    filename = input(f'Specify the sudoku filename:  ')
+
+    try:
+        f = open(filename, "r")
+    except:
+        print ("File not found")
+        exit()
+
+    for line in f:
+        x = line.split(' ')
+        board[int(x[0]), int(x[1])] = int(x[2])
+
+
+    for i in range(1, 10):
+        for j in range(1, 10):
+            analysis_board[i, j] = set([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
     for i in range(1, 10):
         for j in range(1, 10):
@@ -152,10 +144,8 @@ def sudoko_game():
         else:
             break
 
-
-
-    analyse_board(board, analysis_board)
-    m=1
+    print('\n\n')
+    print_board(board)
 
 if __name__ == "__main__":
     sudoko_game()
